@@ -23,3 +23,31 @@ WHERE
     l.lgtyp IN ('820', 'AH1', 'ARM', 'QUR', 'OGP', 'IGP')
     AND l.lgnum = 'GNP'
     AND m.spras = 'E';
+
+
+
+SELECT
+    mard_dali_bbm.lqua_poe.matnr                                         AS "Material1",
+    mard_dali_bbm.makt_poe.maktx                                         AS "Material Description",
+    mard_dali_bbm.lqua_poe.bestq                                         AS "Stock Category",
+    mard_dali_bbm.lqua_poe.lgpla                                         AS "Storage Bin",
+    mard_dali_bbm.lqua_poe.charg                                         AS "Batch",
+    mard_dali_bbm.lqua_poe.verme                                         AS "Available stock",
+    to_char(TO_DATE(mard_dali_bbm.lqua_poe.wdatu, 'YYYYMMDD'),
+            'MM/DD/YYYY')                                                AS "GR Date",
+    to_char(TO_DATE(mard_dali_bbm.lqua_poe.vfdat, 'YYYYMMDD'),
+            'MM/DD/YYYY')                                                AS "SLED/BBD",
+    mard_dali_bbm.lqua_poe.werks                                         AS "Plant",
+    mard_dali_bbm.lqua_poe.lgort                                         AS "Storage Location",
+    mard_dali_bbm.lqua_poe.lgtyp                                         AS "Typ",
+    mard_dali_bbm.lqua_poe.ausme                                         AS "Pick quantity",
+    to_char(TO_DATE(to_char(systimestamp AT LOCAL, 'YYYYMMDD'),
+        'YYYYMMDD') - TO_DATE(mard_dali_bbm.lqua_poe.wdatu, 'YYYYMMDD')) AS "DateDiff"
+FROM
+         mard_dali_bbm.lqua_poe
+    INNER JOIN mard_dali_bbm.makt_poe ON mard_dali_bbm.lqua_poe.matnr = mard_dali_bbm.makt_poe.matnr
+WHERE
+    mard_dali_bbm.lqua_poe.lgtyp IN ( '820', 'AH1', 'ARM', 'QUR', 'OGP',
+                                      'IGP' )
+    AND mard_dali_bbm.lqua_poe.lgnum = 'GNP'
+    AND mard_dali_bbm.makt_poe.spras = 'E'
