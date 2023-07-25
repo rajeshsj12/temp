@@ -1,0 +1,25 @@
+SELECT
+    l.matnr AS "Material1",
+    m.maktx AS "Material Description",
+    l.bestq AS "Stock Category",
+    l.lgpla AS "Storage Bin",
+    l.charg AS "Batch",
+    l.verme AS "Available stock",
+    TO_CHAR(TO_DATE(l.wdatu, 'YYYYMMDD'), 'MM/DD/YYYY') AS "GR Date",
+    TO_CHAR(TO_DATE(l.vfdat, 'YYYYMMDD'), 'MM/DD/YYYY') AS "SLED/BBD",
+    l.werks AS "Plant",
+    l.lgort AS "Storage Location",
+    l.lgtyp AS "Typ",
+    l.ausme AS "Pick quantity",
+    CASE
+        WHEN l.wdatu IS NOT NULL THEN TO_CHAR(SYSDATE, 'YYYYMMDD') - l.wdatu
+        ELSE NULL
+    END AS "DateDiff"
+FROM
+    mard_dali_bbm.lqua_poe l
+JOIN
+    mard_dali_bbm.makt_poe m ON l.matnr = m.matnr
+WHERE
+    l.lgtyp IN ('820', 'AH1', 'ARM', 'QUR', 'OGP', 'IGP')
+    AND l.lgnum = 'GNP'
+    AND m.spras = 'E';
